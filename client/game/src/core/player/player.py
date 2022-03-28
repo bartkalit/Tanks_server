@@ -77,9 +77,10 @@ class Player:
 
     def _health_collide(self):
         for boost in self.game.booster_controller.get_active_boosters():
-            if pygame.sprite.collide_mask(boost.get_sprite(), self.tank):
-                self.game.booster_controller.deactivate_boost(boost)
-                return True
+            if pygame.sprite.collide_rect(boost.get_sprite(), self.tank):
+                if pygame.sprite.collide_mask(boost.get_sprite(), self.tank):
+                    self.game.booster_controller.deactivate_boost(boost)
+                    return True
         return False
 
     def _get_health(self):
