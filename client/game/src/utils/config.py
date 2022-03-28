@@ -37,3 +37,10 @@ class Config:
         'hit': 50,
         'kill': 200
     }
+
+    boosters = {
+        'health': {
+            'lives': 1,
+            'reset_time': 5
+        }
+    }
