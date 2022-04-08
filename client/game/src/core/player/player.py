@@ -92,13 +92,14 @@ class Player:
             self._update_hearts_ui()
 
     def add_ammo(self, additional_ammo):
-        if self.lives < Config.player['tank']['magazine']:
+        if self.bullets < Config.player['tank']['magazine']:
             if self.bullets + additional_ammo > Config.player['tank']['magazine']:
                 self.reload_magazine()
             else:
                 self.bullets += additional_ammo
-            self.reload_time = 0
-            self._update_ammo_ui()
+
+        self.reload_time = 0
+        self._update_ammo_ui()
 
     def _boost_collide(self):
         for boost in self.game.booster_controller.get_active_boosters():
