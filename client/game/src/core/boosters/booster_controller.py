@@ -1,4 +1,4 @@
-from client.game.src.core.boosters.boosters import HealthBoost
+from client.game.src.core.boosters.boosters import HealthBoost, AmmoBoost
 
 
 class BoosterController:
@@ -11,8 +11,14 @@ class BoosterController:
         for boost_sprite in self.game.map.get_health_boosters():
             self.add_health_booster(boost_sprite)
 
+        for boost_sprite in self.game.map.get_ammo_booster():
+            self.add_ammo_booster(boost_sprite)
+
     def add_health_booster(self, sprite):
         self.active_boosters.append(HealthBoost(self.game.screen, sprite))
+
+    def add_ammo_booster(self, sprite):
+        self.active_boosters.append(AmmoBoost(self.game.screen, sprite))
 
     def draw(self):
         for booster in self.active_boosters:
@@ -28,8 +34,9 @@ class BoosterController:
     def get_active_boosters(self):
         return self.active_boosters
 
-    def deactivate_boost(self, boost):
+    def pick_up(self, boost, player):
         self.active_boosters.remove(boost)
         self.inactive_boosters.append(boost)
+        boost.special_gift(player)
         boost.start_reset()
 

@@ -42,5 +42,10 @@ class Config:
         'health': {
             'lives': 1,
             'reset_time': 5
+        },
+        'ammo' : {
+            'bullets': 2,
+            'reset_time': 10
         }
+
     }

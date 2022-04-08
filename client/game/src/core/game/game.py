@@ -31,7 +31,7 @@ class Game:
     def refresh_map(self):
         self.refresh_ground()
         self.refresh_walls()
-        self.refresh_health_boosters()
+        self.refresh_boosters()
         self.refresh_players()
         # self.refresh_bullets()
         pygame.display.update()
@@ -51,7 +51,7 @@ class Game:
     def refresh_bullets(self):
         self.bullet_controller.draw()
 
-    def refresh_health_boosters(self):
+    def refresh_boosters(self):
         self.booster_controller.draw()
 
     def _load_map(self, map_name: str) -> Map:
