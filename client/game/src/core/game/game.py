@@ -1,5 +1,6 @@
 import pygame
 
+from client.game.src.core.boosters.booster_controller import BoosterController
 from client.game.src.core.bullet.bullet_controller import BulletController
 from client.game.src.core.map import Map
 from client.game.src.utils.assets import Assets
@@ -8,10 +9,11 @@ from client.game.src.utils.assets import Assets
 class Game:
     def __init__(self, screen):
         self.screen = screen
-        self.map = self._load_map('danzig')
+        self.map = self._load_map('kyiv')
         self.players = []
         self.assets = Assets(screen, self.map)
         self.bullet_controller = BulletController(self)
+        self.booster_controller = BoosterController(self)
         pass
 
     def add_player(self, player):
@@ -29,6 +31,7 @@ class Game:
     def refresh_map(self):
         self.refresh_ground()
         self.refresh_walls()
+        self.refresh_boosters()
         self.refresh_players()
         # self.refresh_bullets()
         pygame.display.update()
@@ -40,7 +43,6 @@ class Game:
         self.map.walls.draw(self.screen)
 
     def refresh_players(self):
-        self.refresh_ground()
         for player in self.players:
             player.draw()
         self.refresh_bullets()
@@ -48,6 +50,9 @@ class Game:
 
     def refresh_bullets(self):
         self.bullet_controller.draw()
+
+    def refresh_boosters(self):
+        self.booster_controller.draw()
 
     def _load_map(self, map_name: str) -> Map:
         try:

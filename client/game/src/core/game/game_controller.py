@@ -12,6 +12,7 @@ class GameController:
 
         self.game = Game(screen)
         self.game.load_assets()
+        self.game.booster_controller.load_boosters()
         self.game.refresh_map()
         self.current_player = None
 
@@ -37,5 +38,6 @@ class GameController:
                     running = False
             self.current_player.on(frame_time / 1000)
             self.game.bullet_controller.update_bullets(frame_time / 1000)
+            self.game.booster_controller.update_time(frame_time / 1000)
             self.game.refresh_map()
             pygame.display.set_caption('FurryTanks - %.2f FPS' % clock.get_fps())

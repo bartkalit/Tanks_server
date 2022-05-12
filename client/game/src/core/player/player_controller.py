@@ -50,12 +50,16 @@ class PlayerController:
         self.player.reload_time -= time
         StatBar.show_reload(self.screen, self.player)
         if self.player.reload_time <= 0:
+            if self.player.bullets == 0:
+                self._reload_magazine()
             StatBar.show_magazine(self.screen, self.player)
 
     def _reload_magazine(self):
         if self.player.bullets != Config.player['tank']['magazine']:
             self.player.reload_magazine()
-            self.player.reload_time = Config.player['tank']['reload_magazine']
+
+    def _start_reload_time(self):
+        self.player.reload_time = Config.player['tank']['reload_magazine']
 
     def drive(self, drive: Drive, time):
         x, y = self.player.position
@@ -91,8 +95,8 @@ class PlayerController:
     def shot(self):
         if self.player.reload_time <= 0:
             self.player.reload_time = Config.player['tank']['reload_bullet']
+            if self.player.bullets - 1 == 0:
+                self._start_reload_time()
             self.player.shot()
             StatBar.show_magazine(self.screen, self.player)
-            if self.player.bullets == 0:
-                self._reload_magazine()
             # TODO: Send bullet position to the server

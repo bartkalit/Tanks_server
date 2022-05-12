@@ -10,6 +10,8 @@ class Map:
         self.walls = pygame.sprite.Group()
         self.ground = pygame.sprite.Group()
         self.spawn_points = []
+        self._health_boosters = []
+        self._ammo_boosters = []
 
     def add_wall(self, wall):
         self.walls.add(wall)
@@ -19,6 +21,18 @@ class Map:
 
     def add_spawn_point(self, spawn_point):
         self.spawn_points.append(spawn_point)
+
+    def add_health_boost(self, health_boost):
+        self._health_boosters.append(health_boost)
+
+    def add_ammo_boost(self, ammo_boost):
+        self._ammo_boosters.append(ammo_boost)
+
+    def get_health_boosters(self):
+        return self._health_boosters
+
+    def get_ammo_booster(self):
+        return self._ammo_boosters
 
     @property
     def get_spawn_point(self):

@@ -75,14 +75,49 @@ class Player:
     def _collide(self):
         return self._player_collide() or self._wall_collide()
 
+    def _health_collide(self):
+        for boost in self.game.booster_controller.get_active_boosters():
+            if pygame.sprite.collide_rect(boost.get_sprite(), self.tank):
+                if pygame.sprite.collide_mask(boost.get_sprite(), self.tank):
+                    self.game.booster_controller.deactivate_boost(boost)
+                    return True
+        return False
+
+    def add_health(self, additional_lives):
+        if self.lives < Config.player['lives']:
+            if self.lives + additional_lives > Config.player['lives']:
+                self.lives = Config.player['lives']
+            else:
+                self.lives += additional_lives
+            self._update_hearts_ui()
+
+    def add_ammo(self, additional_ammo):
+        if self.bullets < Config.player['tank']['magazine']:
+            if self.bullets + additional_ammo > Config.player['tank']['magazine']:
+                self.reload_magazine()
+            else:
+                self.bullets += additional_ammo
+
+        self.reload_time = 0
+        self._update_ammo_ui()
+
+    def _boost_collide(self):
+        for boost in self.game.booster_controller.get_active_boosters():
+            if pygame.sprite.collide_rect(boost.get_sprite(), self.tank):
+                if pygame.sprite.collide_mask(boost.get_sprite(), self.tank):
+                    self.game.booster_controller.pick_up(boost, self)
+                    return True
+        return False
+
     def move(self, position):
         self.tank.move(position)
         if self._collide():
             self.tank.move(self.position)
         else:
+            self._boost_collide()
             self.position = position
             self.game.refresh_players()
-        # TODO: Emit information to the server
+            # TODO: Emit information to the server
         pass
 
     def rotate(self, angle):
@@ -90,9 +125,10 @@ class Player:
         if self._collide():
             self.tank.rotate(self.angle)
         else:
+            self._boost_collide()
             self.angle += angle
             self.game.refresh_players()
-        # TODO: Emit information to the server
+            # TODO: Emit information to the server
         pass
 
     def shot(self):
@@ -139,6 +175,11 @@ class Player:
     def _update_hearts_ui(self):
         if self.is_current:
             StatBar.show_lives(self.screen, self)
+
+    def _update_ammo_ui(self):
+        if self.is_current:
+            StatBar.show_magazine(self.screen, self)
+            StatBar.show_reload(self.screen, self)
 
     def is_alive(self):
         return self._alive

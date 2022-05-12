@@ -35,6 +35,13 @@ class Assets:
         self.map.add_spawn_point(position)
         self.map.add_ground(Sprite(position, self.all[Blocks.ground]))
 
+    def set_health_boost(self, position):
+        self.set_ground(position)
+        self.map.add_health_boost(Sprite(position, self.all[Blocks.health_boost]))
+
+    def set_ammo_boost(self, position):
+        self.set_ground(position)
+        self.map.add_ammo_boost(Sprite(position, self.all[Blocks.ammo_boost]))
 
     def set_block(self, char, position):
         block = Blocks.getBlock(char)
@@ -44,3 +51,7 @@ class Assets:
             self.set_ground(position)
         if block == Blocks.spawn_point:
             self.set_spawn_point(position)
+        if block == Blocks.health_boost:
+            self.set_health_boost(position)
+        if block == Blocks.ammo_boost:
+            self.set_ammo_boost(position)
