@@ -34,7 +34,7 @@ class Config:
     }
 
     rewards = {
-        'hit': 50,
+        'hit': 25,
         'kill': 200
     }
 
