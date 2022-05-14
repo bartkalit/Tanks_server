@@ -3,39 +3,12 @@ from _thread import *
 import threading
 import time
 import json
-import sys
+import pickle
 
-print_lock = threading.Lock()
+from client.game.src.utils.game_state import GameState
+
+thread_lock = threading.Lock()
 clients = []
-
-
-word_state = {
-    "players": [
-        {
-            "id": 41, "x": 5, "y": 2, "angle": 5.0, "lives": 3
-        },
-        {
-            "id": 12, "x": 5, "y": 2, "angle": 5.0, "lives": 3
-        }
-    ],
-    "boosts": [
-        {
-            "id": 0, "player_id": 0, "x": 0, "y": 0, "angle": 0.0, "active": True, "type": "health"
-        },
-        {
-            "id": 0, "player_id": 0, "x": 0, "y": 0, "angle": 0.0, "active": True, "type": "bullet"
-        }
-    ],
-    "bullets": [
-        {
-            "id": 0, "player_id": 0, "x": 0, "y": 0, "angle": 0.0
-        },
-        {
-            "id": 1, "player_id": 0, "x": 0, "y": 0, "angle": 0.0
-        }
-    ]
-}
-print(sys.getsizeof(word_state))
 
 
 def client_read(c):
@@ -45,20 +18,26 @@ def client_read(c):
         b += data
 
         packet = json.loads(b.decode("utf-8"))
-        print(packet)
-
+        # print(packet)
     c.close()
 
 
 def broadcast(clients):
-    tps = 3600
+    tps = 400
     last_time = time.time()
-
+    world_state = GameState().world_state
     while True:
         if clients:
-            data = json.dumps(word_state)
+            thread_lock.acquire()
+            world_state["players"][1]["x"] += 1
+            world_state["players"][0]["x"] += 1
+            thread_lock.release()
+            print("wysylam")
+            # data = json.dumps(world_state)
+            data = pickle.dumps(world_state)
             for client in clients:
-                client.send(data.encode("utf-8"))
+                # client.send(data.encode("utf-8"))
+                client.send(data)
 
         interval = tps / 3600.0
         current_time = time.time()

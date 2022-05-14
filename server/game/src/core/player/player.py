@@ -11,14 +11,16 @@ from client.game.src.utils.sprite import TankSprite
 
 
 class Player:
-    def __init__(self, game, id: int, position=(400, 400), angle=0):
+    def __init__(self, game, id: int, position=None):
+        if position is None:
+            position = (400, 400)
         self.game = game
         self.screen = game.screen
         self.map = game.map
         self.tank = None
         self.id = id
         self.position = position
-        self.angle = angle
+        self.angle = 0
         self.points = 0
         self.lives = Config.player['lives']
         self.bullets = Config.player['tank']['magazine']
@@ -35,9 +37,9 @@ class Player:
         self.is_current = ~self.is_current
 
     def create_tank(self):
-        tank = pygame.image.load('assets/textures/tank' + str((self.id % 3) + 1) + '.png')
+        tank = pygame.image.load('assets/textures/tank' + str(self.id) + '.png')
 
-        self.position = self.position
+        self.position = self.map.get_spawn_point
         self.tank = TankSprite(self.position, pygame.transform.scale(tank, self.get_tank_size()))
         self.rotate(self.init_angle())
         self.game.refresh_players()
@@ -100,11 +102,11 @@ class Player:
         self._update_ammo_ui()
 
     def _boost_collide(self):
-        # for boost in self.game.booster_controller.get_active_boosters():
-        #     if pygame.sprite.collide_rect(boost.get_sprite(), self.tank):
-        #         if pygame.sprite.collide_mask(boost.get_sprite(), self.tank):
-        #             self.game.booster_controller.pick_up(boost, self)
-        #             return True
+        for boost in self.game.booster_controller.get_active_boosters():
+            if pygame.sprite.collide_rect(boost.get_sprite(), self.tank):
+                if pygame.sprite.collide_mask(boost.get_sprite(), self.tank):
+                    self.game.booster_controller.pick_up(boost, self)
+                    return True
         return False
 
     def move(self, position):
@@ -119,23 +121,21 @@ class Player:
         pass
 
     def rotate(self, angle):
-        if abs(self.angle - angle) > 0:
-            self.tank.rotate(self.angle - angle)
-            self.angle = angle
-            if self._collide():
-                self.tank.rotate(self.angle)
-            else:
-                self._boost_collide()
-                self.angle += angle
-                self.game.refresh_players()
-                # TODO: Emit information to the server
-            pass
+        self.tank.rotate(self.angle + angle)
+        if self._collide():
+            self.tank.rotate(self.angle)
+        else:
+            self._boost_collide()
+            self.angle += angle
+            self.game.refresh_players()
+            # TODO: Emit information to the server
+        pass
 
     def shot(self):
         if self.bullets > 0:
             self.bullets -= 1
             new_x, new_y = self.get_barrel_position()
-            self.game.bullet_controller.add_bullet(self, self.id, (new_x, new_y), self.angle)
+            self.game.bullet_controller.add_bullet(self, (new_x, new_y), self.angle)
             # TODO: Create bullet & emit information to the server
 
     def reload_magazine(self):

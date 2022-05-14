@@ -13,11 +13,11 @@ class Blocks:
     def getBlock(char):
         if char == '#':
             return Blocks.wall
+        if char == '.':
+            return Blocks.ground
         if char == 'S':
             return Blocks.spawn_point
-        else:
-            return Blocks.ground
-        # if char == 'H':
-        #     return Blocks.health_boost
-        # if char == 'A':
-        #     return Blocks.ammo_boost
+        if char == 'H':
+            return Blocks.health_boost
+        if char == 'A':
+            return Blocks.ammo_boost
