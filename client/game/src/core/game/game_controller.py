@@ -1,9 +1,13 @@
+import threading
+
 import pygame
 
 from client.game.src.core.game.game import Game
 from client.game.src.core.player.player import Player
 from client.game.src.core.player.player_controller import PlayerController
 from client.game.src.utils.config import Config
+
+thread_lock = threading.Lock()
 
 
 class GameController:
@@ -33,6 +37,7 @@ class GameController:
         running = True
         while running:
             frame_time = clock.tick(Config.game['fps'])
+            thread_lock.acquire()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -41,4 +46,5 @@ class GameController:
             # self.game.booster_controller.update_time()
             self.game.update_players()
             self.game.refresh_map()
+            thread_lock.release()
             pygame.display.set_caption('FurryTanks - %.2f FPS' % clock.get_fps())

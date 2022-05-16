@@ -20,20 +20,25 @@ def server_read(c, world_state, ):
         b += data
         # print(b)
         # packet = json.loads(b.decode("utf-8"))
-        packet = pickle.loads(data)
-        thread_lock.acquire()
-        world_state["players"] = packet["players"]
-        world_state["boosts"] = packet["boosts"]
-        world_state["bullets"] = packet["bullets"]
-        world_state["boxes"] = packet["boxes"]
-        # print(packet)
-        thread_lock.release()
+        try:
+            thread_lock.acquire()
+            packet = pickle.loads(data)
+            world_state["players"] = packet["players"]
+            world_state["boosts"] = packet["boosts"]
+            world_state["bullets"] = packet["bullets"]
+            world_state["boxes"] = packet["boxes"]
+            # print(packet)
+        except:
+            print("Invalid Packet")
+        finally:
+            thread_lock.release()
     c.close()
 
 
 def tanks(world_state):
     screen = Screen(world_state)
     screen.start_game()
+    pass
 
 
 def server_send(s):
