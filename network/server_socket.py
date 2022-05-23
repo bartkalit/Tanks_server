@@ -23,7 +23,8 @@ def client_read(c):
 
 
 def broadcast(clients):
-    tps = 400
+    tps = 40
+    interval = 1 / tps
     last_time = time.time()
     world_state = GameState().world_state
     while True:
@@ -39,7 +40,7 @@ def broadcast(clients):
                 # client.send(data.encode("utf-8"))
                 client.send(data)
 
-        interval = tps / 3600.0
+        # interval = tps / 3600.0
         current_time = time.time()
         delta = current_time - last_time
 

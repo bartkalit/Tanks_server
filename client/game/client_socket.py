@@ -26,14 +26,15 @@ def server_read(c, world_state, ):
         world_state["boosts"] = packet["boosts"]
         world_state["bullets"] = packet["bullets"]
         world_state["boxes"] = packet["boxes"]
-        # print(packet)
+        print(packet)
         thread_lock.release()
     c.close()
 
 
 def tanks(world_state):
-    screen = Screen(world_state)
-    screen.start_game()
+    # screen = Screen(world_state)
+    # screen.start_game()
+    return 0
 
 
 def server_send(s):
