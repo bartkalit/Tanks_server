@@ -23,7 +23,7 @@ def client_read(c):
 
 
 def broadcast(clients):
-    tps = 20
+    tps = 30
     last_time = time.time()
     world_state = GameState().world_state
     while True:
