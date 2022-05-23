@@ -1,6 +1,6 @@
 import pygame
 
-from client.game.src.utils.config import Config
+from server.game.src.utils.config import Config
 
 
 class Sprite(pygame.sprite.Sprite):

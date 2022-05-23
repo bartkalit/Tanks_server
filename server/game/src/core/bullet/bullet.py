@@ -1,6 +1,6 @@
 import pygame
 
-from client.game.src.utils.sprite import BulletSprite
+from server.game.src.utils.sprite import BulletSprite
 
 
 class Bullet:

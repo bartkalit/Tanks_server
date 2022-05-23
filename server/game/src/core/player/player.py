@@ -5,9 +5,9 @@ from time import sleep
 
 import pygame
 
-from client.game.src.core.stat_bar.stat_bar import StatBar
-from client.game.src.utils.config import Config
-from client.game.src.utils.sprite import TankSprite
+from server.game.src.core.stat_bar.stat_bar import StatBar
+from server.game.src.utils.config import Config
+from server.game.src.utils.sprite import TankSprite
 
 
 class Player:

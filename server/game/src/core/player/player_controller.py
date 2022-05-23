@@ -2,8 +2,8 @@ from enum import Enum
 from math import cos, sin, pi
 import pygame
 
-from client.game.src.core.stat_bar.stat_bar import StatBar
-from client.game.src.utils.config import Config
+from server.game.src.core.stat_bar.stat_bar import StatBar
+from server.game.src.utils.config import Config
 
 
 class Drive(Enum):
