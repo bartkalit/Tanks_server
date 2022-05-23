@@ -17,7 +17,7 @@ class Config:
     }
 
     game = {
-        'fps': 60
+        'fps': 6000
     }
 
     bullet = {

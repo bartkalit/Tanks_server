@@ -1,3 +1,3 @@
-from client.game.src.core.screen import Screen
+from server.game.src.core.screen import Screen
 
 screen = Screen()

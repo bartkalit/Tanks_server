@@ -23,15 +23,23 @@ def client_read(c):
 
 
 def broadcast(clients):
-    tps = 40
-    interval = 1 / tps
+    tps = 30
     last_time = time.time()
     world_state = GameState().world_state
     while True:
+        interval = 1 / tps
+        current_time = time.time()
+        delta = current_time - last_time
+
+        if delta < interval:
+            time.sleep(interval - delta)
+
         if clients:
             thread_lock.acquire()
-            world_state["players"][1]["x"] += 1
-            world_state["players"][0]["x"] += 1
+            print((time.time() - last_time) * 120)
+            world_state["players"][1]["x"] += 80 * (time.time() - last_time)
+            world_state["players"][0]["x"] += 80 * (time.time() - last_time)
+            world_state["players"][1]["angle"] += 0.5
             thread_lock.release()
             print("wysylam")
             # data = json.dumps(world_state)
@@ -39,14 +47,6 @@ def broadcast(clients):
             for client in clients:
                 # client.send(data.encode("utf-8"))
                 client.send(data)
-
-        # interval = tps / 3600.0
-        current_time = time.time()
-        delta = current_time - last_time
-
-        if delta < interval:
-            time.sleep(interval - delta)
-
         last_time = time.time()
 
 
