@@ -1,15 +1,16 @@
 import pygame
 
-from client.game.src.core.boosters.booster_controller import BoosterController
-from client.game.src.core.bullet.bullet_controller import BulletController
-from client.game.src.core.map import Map
-from client.game.src.utils.assets import Assets
+from server.game.src.core.boosters.booster_controller import BoosterController
+from server.game.src.core.bullet.bullet_controller import BulletController
+from server.game.src.core.map import Map
+from server.game.src.utils.assets import Assets
 
 
 class Game:
-    def __init__(self, screen):
+    def __init__(self, screen, world_state):
         self.screen = screen
-        self.map = self._load_map('kyiv')
+        self.world_state = world_state
+        self.map = self._load_map(world_state["map"])
         self.players = []
         self.assets = Assets(screen, self.map)
         self.bullet_controller = BulletController(self)

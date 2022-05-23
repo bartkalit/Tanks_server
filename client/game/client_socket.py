@@ -5,6 +5,7 @@ import pickle
 import time
 from _thread import *
 import threading
+import keyboard
 
 from client.game.src.core.screen import Screen
 from client.game.src.utils.game_state import GameState
@@ -41,21 +42,34 @@ def tanks(world_state):
     pass
 
 
-def server_send(s):
-    tps = 3600
-    last_time = time.time()
-    packet = "client"
+def server_send(s, player_input):
+    data = json.dumps(player_input)
+    s.send(data.encode("utf-8"))
+
+
+def player_inputs(s, ):
     while True:
-        data = json.dumps(packet)
-        s.send(data.encode("utf-8"))
-        interval = tps / 3600.0
-        current_time = time.time()
-        delta = current_time - last_time
-
-        if delta < interval:
-            time.sleep(interval - delta)
-
-        last_time = time.time()
+        inputs = GameState().player_input.copy()
+        key = keyboard.read_key()
+        if key == "w":
+            print("W")
+            inputs["forward"] = True
+            server_send(s, inputs)
+        if key == "s":
+            inputs["backward"] = True
+            server_send(s, inputs)
+        if key == "a":
+            inputs["left"] = True
+            server_send(s, inputs)
+        if key == "d":
+            inputs["right"] = True
+            server_send(s, inputs)
+        if key == "space":
+            inputs["shot"] = True
+            server_send(s, inputs)
+        if key == "r":
+            inputs["reload"] = True
+            server_send(s, inputs)
 
 
 if __name__ == '__main__':
@@ -67,8 +81,9 @@ if __name__ == '__main__':
     s.connect((host, port))
 
     start_new_thread(server_read, (s, world_state,))
+    # start_new_thread(player_inputs, (s,))
     start_new_thread(tanks, (world_state, ))
-    send = threading.Thread(target=server_send, args=(s,))
+    send = threading.Thread(target=player_inputs, args=(s,))
     send.start()
     send.join()
 

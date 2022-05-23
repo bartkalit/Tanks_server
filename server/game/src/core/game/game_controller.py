@@ -1,16 +1,16 @@
 import pygame
 
-from client.game.src.core.game.game import Game
-from client.game.src.core.player.player import Player
-from client.game.src.core.player.player_controller import PlayerController
-from client.game.src.utils.config import Config
+from server.game.src.core.game.game import Game
+from server.game.src.core.player.player import Player
+from server.game.src.core.player.player_controller import PlayerController
+from server.game.src.utils.config import Config
 
 
 class GameController:
-    def __init__(self, screen):
+    def __init__(self, screen, world_state):
         self.screen = screen
-
-        self.game = Game(screen)
+        self.world_state = world_state
+        self.game = Game(screen, world_state)
         self.game.load_assets()
         self.game.booster_controller.load_boosters()
         self.game.refresh_map()
@@ -19,6 +19,7 @@ class GameController:
     def join(self):
         players = self.game.players
         player = Player(self.game, len(players) + 1)
+
         if self.current_player is None:
             player.change_current()
             self.current_player = PlayerController(player, self.screen)
@@ -36,7 +37,8 @@ class GameController:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-            self.current_player.on(frame_time / 1000)
+            for player in self.game.players:
+                self.player.on(frame_time / 1000)
             self.game.bullet_controller.update_bullets(frame_time / 1000)
             self.game.booster_controller.update_time(frame_time / 1000)
             self.game.refresh_map()

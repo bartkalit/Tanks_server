@@ -1,4 +1,4 @@
-from client.game.src.core.boosters.boosters import HealthBoost, AmmoBoost
+from server.game.src.core.boosters.boosters import HealthBoost, AmmoBoost
 
 
 class BoosterController:

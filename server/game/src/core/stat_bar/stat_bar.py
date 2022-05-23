@@ -1,7 +1,7 @@
 import pygame
 
-from client.game.src.utils.config import Config
-from client.game.src.utils.sprite import Sprite
+from server.game.src.utils.config import Config
+from server.game.src.utils.sprite import Sprite
 
 
 class StatBar:

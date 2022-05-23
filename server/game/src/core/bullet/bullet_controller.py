@@ -2,8 +2,8 @@ from math import sin, cos, pi
 
 import pygame
 
-from client.game.src.core.bullet.bullet import Bullet
-from client.game.src.utils.config import Config
+from server.game.src.core.bullet.bullet import Bullet
+from server.game.src.utils.config import Config
 
 
 class BulletController:

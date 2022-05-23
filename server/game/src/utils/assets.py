@@ -1,8 +1,8 @@
 import pygame
 
-from client.game.src.utils.blocks import Blocks
-from client.game.src.utils.config import Config
-from client.game.src.utils.sprite import Sprite
+from server.game.src.utils.blocks import Blocks
+from server.game.src.utils.config import Config
+from server.game.src.utils.sprite import Sprite
 
 
 class Assets:
