@@ -16,7 +16,6 @@ class TankSprite(pygame.sprite.Sprite):
         self.image = image
         self._image = image
         self._position = position
-        print(position)
         self.rect = self.image.get_rect(center=position)
 
     def move(self, position):

@@ -12,39 +12,17 @@ class BulletController:
         self.bullets = []
         self.consumed_bullets = []
 
-    def add_bullet(self, id, player, position, angle):
-        self.bullets.append(Bullet(self.game.screen, id, player, position, angle))
+    def add_bullet(self, player, position, angle):
+        self.bullets.append(Bullet(self.game.screen, player, position, angle))
 
     def draw(self):
         for bullet in self.bullets:
             bullet.draw()
 
-    def get_bullet(self, id):
+    def update_bullets(self, time):
         for bullet in self.bullets:
-            if bullet.id == id:
-                return bullet
-        return None
-
-    def update_bullets(self):
-        bullets_ids = []
-        for bullet_info in self.game.world_state["bullets"]:
-            bullet = self.get_bullet(bullet_info["id"])
-            bullets_ids.append(bullet_info["id"])
-            position = (bullet_info["x"], bullet_info["y"])
-            if bullet:
-                bullet.position = position
-                bullet.angle = bullet_info["angle"]
-            else:
-                self.add_bullet(
-                    bullet_info["id"],
-                    self.game.get_player(bullet_info["player_id"]),
-                    position,
-                    bullet_info["angle"]
-                )
-
-        for bullet in self.bullets:
-            if bullet.id not in bullets_ids:
-                self.consumed_bullets.append(bullet)
+            self.move(bullet, time)
+        # TODO: Send position to the server
 
         for bullet in self.consumed_bullets:
             self.bullets.remove(bullet)

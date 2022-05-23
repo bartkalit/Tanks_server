@@ -3,36 +3,21 @@ import pygame
 from client.game.src.core.boosters.booster_controller import BoosterController
 from client.game.src.core.bullet.bullet_controller import BulletController
 from client.game.src.core.map import Map
-from client.game.src.core.player.player import Player
 from client.game.src.utils.assets import Assets
 
 
 class Game:
-    def __init__(self, screen, world_state):
+    def __init__(self, screen):
         self.screen = screen
-        self.world_state = world_state
-        self.map = self._load_map(world_state["map"])
+        self.map = self._load_map('kyiv')
         self.players = []
         self.assets = Assets(screen, self.map)
         self.bullet_controller = BulletController(self)
         self.booster_controller = BoosterController(self)
         pass
 
-    def get_player(self, id):
-        for player in self.players:
-            if player.id == id:
-                return player
-
-    # def add_player(self, player):
-    #     self.players.append(player)
-    #
-    #
-    #     # players = self.game.players
-    #     # player = Player(self.game, len(players) + 1)
-    #     # if self.current_player is None:
-    #     #     player.change_current()
-    #     #     self.current_player = PlayerController(player, self.screen)
-    #     # self.game.add_player(player)
+    def add_player(self, player):
+        self.players.append(player)
 
     def load_assets(self):
         x, y = 0, 0
@@ -42,20 +27,6 @@ class Game:
                 self.assets.set_block(block, (x, y))
                 x += self.assets.width
             y += self.assets.height
-
-    def load_players(self):
-        for player_info in self.world_state["players"]:
-            position = (player_info["x"], player_info["y"])
-            player = Player(self, player_info["id"], position, player_info["angle"])
-            self.players.append(player)
-
-    def update_players(self):
-        for player_info in self.world_state["players"]:
-            id = player_info["id"]
-            position = (player_info["x"], player_info["y"])
-            player = self.get_player(id)
-            player.move(position)
-            player.rotate(player_info["angle"])
 
     def refresh_map(self):
         self.refresh_ground()
