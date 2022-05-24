@@ -191,5 +191,5 @@ class Player:
         pass
 
     def get_info(self):
-        return {"id": self.id, "x": self.position[0], "y": self.position[1],
-                "angle": self.angle, "lives": self.lives, "points": self.points}
+        return {"id": self.id, "x": self.position[0], "y": self.position[1], "angle": self.angle,
+                "lives": self.lives, "bullets": self.bullets "points": self.points}

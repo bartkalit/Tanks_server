@@ -61,10 +61,10 @@ class Game:
                 if player == current_player:
                     player._update_hearts_ui()
 
-            # if player.bullets != player_info["bullets"]:
-            #     player.bullets = player_info["bullets"]
-            #     if player == current_player:
-            #         player._update_ammo_ui()
+            if player.bullets != player_info["bullets"]:
+                player.bullets = player_info["bullets"]
+                if player == current_player:
+                    player._update_ammo_ui()
 
             if player.points != player_info["points"]:
                 player.points = player_info["points"]
