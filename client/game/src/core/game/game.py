@@ -15,24 +15,13 @@ class Game:
         self.players = []
         self.assets = Assets(screen, self.map)
         self.bullet_controller = BulletController(self)
-        self.booster_controller = BoosterController(self)
+        self.booster_controller = BoosterController(self, world_state)
         pass
 
     def get_player(self, id):
         for player in self.players:
             if player.id == id:
                 return player
-
-    # def add_player(self, player):
-    #     self.players.append(player)
-    #
-    #
-    #     # players = self.game.players
-    #     # player = Player(self.game, len(players) + 1)
-    #     # if self.current_player is None:
-    #     #     player.change_current()
-    #     #     self.current_player = PlayerController(player, self.screen)
-    #     # self.game.add_player(player)
 
     def load_assets(self):
         x, y = 0, 0

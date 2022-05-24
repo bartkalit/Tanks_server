@@ -23,17 +23,12 @@ class GameController:
     def join(self):
         print(self.game.world_state["client_id"])
         player = self.game.get_player(self.game.world_state["client_id"])
-        # player = Player(self.game, len(players) + 1)
         if self.current_player is None:
             player.change_current()
             self.current_player = PlayerController(player, self.screen)
-        # self.game.add_player(player)
         pass
 
     def start(self):
-        # player = self.game.get_player(self.game.world_state["client_id"])
-        # player.change_current()
-        # self.current_player = PlayerController(player, self.screen)
         self.game.refresh_map()
         self.loop()
 

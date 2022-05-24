@@ -2,8 +2,9 @@ from client.game.src.core.boosters.boosters import HealthBoost, AmmoBoost
 
 
 class BoosterController:
-    def __init__(self, game):
+    def __init__(self, game, world_state):
         self.game = game
+        self.world_state = world_state
         self.active_boosters = []
         self.inactive_boosters = []
         self.load_boosters()
@@ -31,9 +32,24 @@ class BoosterController:
     def add_ammo_booster(self, id, sprite):
         self.active_boosters.append(AmmoBoost(self.game.screen, id, sprite))
 
+    def get_booster(self, id):
+        for boost in self.active_boosters:
+            if boost.id == id:
+                return boost
+        for boost in self.inactive_boosters:
+            if boost.id == id:
+                return boost
+        return None
+
     def draw(self):
-        for booster in self.active_boosters:
-            booster.draw()
+        boosters = self.world_state["boosts"]
+        for boost_info in boosters:
+            if boost_info["active"]:
+                boost = self.get_booster(boost_info["id"])
+                boost.draw()
+
+        # for booster in self.active_boosters:
+        #     booster.draw()
 
     def update_time(self, time):
         for boost in self.inactive_boosters:
