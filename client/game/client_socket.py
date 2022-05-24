@@ -54,7 +54,9 @@ def tanks(world_state):
 
 def server_send(s, player_input):
     data = json.dumps(player_input)
-    s.send(data.encode("utf-8"))
+
+    s.sendall(struct.pack('>I', len(data)))
+    s.sendall(data)
 
 
 def player_inputs(s, ):

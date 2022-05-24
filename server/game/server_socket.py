@@ -15,12 +15,17 @@ clients = []
 
 def client_read(c, id, player_inputs):
     while True:
+        data_size = struct.unpack('>I', c.recv(4))[0]
         b = b''
-        data = c.recv(1024)
-        b += data
+        reamining_payload_size = data_size
+
+        while reamining_payload_size != 0:
+            b += c.recv(reamining_payload_size)
+            reamining_payload_size = data_size - len(b)
+
         try:
             thread_lock.acquire()
-            packet = json.loads(b.decode("utf-8"))
+            packet = json.loads(b)
             player_inputs[id] = packet
         except:
             print("Invalid Packet")
@@ -30,7 +35,7 @@ def client_read(c, id, player_inputs):
 
 
 def broadcast(clients, world_state, ):
-    tps = 30
+    tps = 60
     last_time = time.time()
     while True:
         interval = 1 / tps
@@ -45,7 +50,6 @@ def broadcast(clients, world_state, ):
             data = pickle.dumps(world_state)
             thread_lock.release()
             for client in clients:
-                print(len(struct.pack('>I', len(data))))
                 client.sendall(struct.pack('>I', len(data)))
                 client.sendall(data)
         last_time = time.time()
