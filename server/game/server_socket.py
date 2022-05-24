@@ -61,10 +61,14 @@ def game_logic(world_state, player_inputs):
 
 
 def Main():
-    host = "192.168.0.220"
+    ip = socket.gethostbyname(socket.gethostname())
+    port = 3000
+
+    print("IP:", ip)
+    print("PORT:", port)
+    host = ip
     world_state = GameState().world_state
     player_inputs = [GameState().player_input.copy(), GameState().player_input.copy()]
-    port = 3000
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((host, port))
     print("socket binded to port", port)
