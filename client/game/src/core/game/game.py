@@ -4,6 +4,7 @@ from client.game.src.core.boosters.booster_controller import BoosterController
 from client.game.src.core.bullet.bullet_controller import BulletController
 from client.game.src.core.map import Map
 from client.game.src.core.player.player import Player
+from client.game.src.core.stat_bar.stat_bar import StatBar
 from client.game.src.utils.assets import Assets
 
 
