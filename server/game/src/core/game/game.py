@@ -7,9 +7,10 @@ from server.game.src.utils.assets import Assets
 
 
 class Game:
-    def __init__(self, screen, world_state):
+    def __init__(self, screen, world_state, players_inputs):
         self.screen = screen
         self.world_state = world_state
+        self.players_inputs = players_inputs
         self.map = self._load_map(world_state["map"])
         self.players = []
         self.assets = Assets(screen, self.map)

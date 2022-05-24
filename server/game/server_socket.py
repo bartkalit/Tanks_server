@@ -12,14 +12,17 @@ thread_lock = threading.Lock()
 clients = []
 
 
-def client_read(c, id):
+def client_read(c, id, player_inputs):
     while True:
         b = b''
         data = c.recv(1024)
         b += data
 
         packet = json.loads(b.decode("utf-8"))
-        print(f"id {id}: {packet}")
+        thread_lock.acquire()
+        player_inputs[id] = packet
+        print(player_inputs)
+        thread_lock.release()
     c.close()
 
 
@@ -43,15 +46,21 @@ def broadcast(clients, world_state,):
         last_time = time.time()
 
 
+def game_logic(world_state, player_inputs):
+    screen = Screen(world_state, player_inputs)
+    pass
+
+
 def Main():
     host = "127.0.0.1"
     world_state = GameState().world_state
-    # screen = Screen(world_state)
+    player_inputs = [GameState().player_input.copy(), GameState().player_input.copy()]
     port = 3000
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((host, port))
     print("socket binded to port", port)
     s.listen(5)
+    start_new_thread(game_logic, (world_state, player_inputs, ))
     start_new_thread(broadcast, (clients, world_state))
 
     id = 0
@@ -59,8 +68,7 @@ def Main():
         c, addr = s.accept()
         clients.append(c)
         print('Connected to :', addr[0], ':', addr[1])
-
-        start_new_thread(client_read, (c, id))
+        start_new_thread(client_read, (c, id, player_inputs))
         id += 1
 
     s.close()
