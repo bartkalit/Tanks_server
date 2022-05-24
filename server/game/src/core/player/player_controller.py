@@ -17,9 +17,10 @@ class Rotate(Enum):
 
 
 class PlayerController:
-    def __init__(self, player, screen):
+    def __init__(self, player, screen, players_inputs):
         self.screen = screen
         self.player = player
+        self.players_inputs = players_inputs
         self.draw_ui()
 
     def draw_ui(self):
@@ -30,18 +31,18 @@ class PlayerController:
 
     def on(self, time):
         if self.player.is_alive():
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_w]:
+            input = self.players_inputs[self.player.id - 1]
+            if input["forward"]:
                 self.drive(Drive.FORWARD, time)
-            if keys[pygame.K_s]:
+            if input["backward"]:
                 self.drive(Drive.BACKWARD, time)
-            if keys[pygame.K_a]:
+            if input["left"]:
                 self.rotate(Rotate.LEFT, time)
-            if keys[pygame.K_d]:
+            if input["right"]:
                 self.rotate(Rotate.RIGHT, time)
-            if keys[pygame.K_SPACE]:
+            if input["shot"]:
                 self.shot()
-            if keys[pygame.K_r]:
+            if input["reload"]:
                 self._reload_magazine()
             if self.player.reload_time > 0:
                 self._reload(time)

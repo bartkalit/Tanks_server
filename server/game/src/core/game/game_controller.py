@@ -7,22 +7,24 @@ from server.game.src.utils.config import Config
 
 
 class GameController:
-    def __init__(self, screen, world_state):
+    def __init__(self, screen, world_state, players_inputs):
         self.screen = screen
         self.world_state = world_state
-        self.game = Game(screen, world_state)
+        self.players_inputs = players_inputs
+        self.game = Game(screen, world_state, players_inputs)
         self.game.load_assets()
         self.game.booster_controller.load_boosters()
         self.game.refresh_map()
+        self.players = []
         self.current_player = None
 
     def join(self):
         players = self.game.players
         player = Player(self.game, len(players) + 1)
-
+        self.players.append(PlayerController(player, self.screen, self.players_inputs))
         if self.current_player is None:
             player.change_current()
-            self.current_player = PlayerController(player, self.screen)
+            self.current_player = PlayerController(player, self.screen, self.players_inputs)
         self.game.add_player(player)
 
     def start(self):
@@ -37,8 +39,9 @@ class GameController:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-            for player in self.game.players:
-                self.player.on(frame_time / 1000)
+            # for player in self.players:
+            self.players[1].on(frame_time / 1000)
+            self.current_player.on(frame_time / 1000)
             self.game.bullet_controller.update_bullets(frame_time / 1000)
             self.game.booster_controller.update_time(frame_time / 1000)
             self.game.refresh_map()

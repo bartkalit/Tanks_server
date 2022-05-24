@@ -1,11 +1,9 @@
 import socket
-import sys
 import json
 import pickle
-import time
 from _thread import *
 import threading
-import keyboard
+from pynput.keyboard import Key, Listener, KeyCode
 
 from client.game.src.core.screen import Screen
 from client.game.src.utils.game_state import GameState
@@ -48,28 +46,77 @@ def server_send(s, player_input):
 
 
 def player_inputs(s, ):
-    while True:
-        inputs = GameState().player_input.copy()
-        key = keyboard.read_key()
-        if key == "w":
-            print("W")
+
+    def on_press(key):
+        if key == KeyCode.from_char('w'):
             inputs["forward"] = True
             server_send(s, inputs)
-        if key == "s":
+        elif key == KeyCode.from_char('s'):
             inputs["backward"] = True
             server_send(s, inputs)
-        if key == "a":
+        elif key == KeyCode.from_char('a'):
             inputs["left"] = True
             server_send(s, inputs)
-        if key == "d":
+        elif key == KeyCode.from_char('d'):
             inputs["right"] = True
             server_send(s, inputs)
-        if key == "space":
+        elif key == Key.space:
             inputs["shot"] = True
             server_send(s, inputs)
-        if key == "r":
+        elif key == KeyCode.from_char('r'):
             inputs["reload"] = True
             server_send(s, inputs)
+
+    def on_release(key):
+        if key == KeyCode.from_char('w'):
+            inputs["forward"] = False
+            server_send(s, inputs)
+        elif key == KeyCode.from_char('s'):
+            inputs["backward"] = False
+            server_send(s, inputs)
+        elif key == KeyCode.from_char('a'):
+            inputs["left"] = False
+            server_send(s, inputs)
+        elif key == KeyCode.from_char('d'):
+            inputs["right"] = False
+            server_send(s, inputs)
+        elif key == Key.space:
+            inputs["shot"] = False
+            server_send(s, inputs)
+        elif key == KeyCode.from_char('r'):
+            inputs["reload"] = False
+            server_send(s, inputs)
+
+    inputs = GameState().player_input.copy()
+    while True:
+        with Listener(
+                on_press=on_press,
+                on_release=on_release) as listener:
+            listener.join()
+    # while True:
+    #     inputs = GameState().player_input.copy()
+    #     key = keyboard.read_key()
+    #     if key == "w":
+    #         print("W")
+    #         inputs["forward"] = True
+    #         server_send(s, inputs)
+    #     elif key == "s":
+    #         inputs["backward"] = True
+    #         server_send(s, inputs)
+    #     elif key == "a":
+    #         inputs["left"] = True
+    #         server_send(s, inputs)
+    #     elif key == "d":
+    #         inputs["right"] = True
+    #         server_send(s, inputs)
+    #     elif key == "space":
+    #         inputs["shot"] = True
+    #         server_send(s, inputs)
+    #     elif key == "r":
+    #         inputs["reload"] = True
+    #         server_send(s, inputs)
+
+
 
 
 if __name__ == '__main__':
@@ -81,8 +128,7 @@ if __name__ == '__main__':
     s.connect((host, port))
 
     start_new_thread(server_read, (s, world_state,))
-    # start_new_thread(player_inputs, (s,))
-    start_new_thread(tanks, (world_state, ))
+    # start_new_thread(tanks, (world_state, ))
     send = threading.Thread(target=player_inputs, args=(s,))
     send.start()
     send.join()
