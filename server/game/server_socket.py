@@ -1,8 +1,8 @@
 import socket
+import struct
 from _thread import *
 import threading
 import time
-import json
 import pickle
 
 from server.game.src.utils.game_state import GameState
@@ -14,12 +14,17 @@ clients = []
 
 def client_read(c, id, player_inputs):
     while True:
+        data_size = struct.unpack('>I', c.recv(4))[0]
         b = b''
-        data = c.recv(1024)
-        b += data
+        reamining_payload_size = data_size
+
+        while reamining_payload_size != 0:
+            b += c.recv(reamining_payload_size)
+            reamining_payload_size = data_size - len(b)
+
         try:
             thread_lock.acquire()
-            packet = json.loads(b.decode("utf-8"))
+            packet = pickle.loads(b)
             player_inputs[id] = packet
         except:
             print("Invalid Packet")
@@ -29,7 +34,7 @@ def client_read(c, id, player_inputs):
 
 
 def broadcast(clients, world_state, ):
-    tps = 30
+    tps = 600
     last_time = time.time()
     while True:
         interval = 1 / tps
@@ -40,11 +45,13 @@ def broadcast(clients, world_state, ):
             time.sleep(interval - delta)
 
         if clients:
-            thread_lock.acquire()
-            data = pickle.dumps(world_state)
-            thread_lock.release()
-            for client in clients:
-                client.send(data)
+            for id, client in enumerate(clients):
+                thread_lock.acquire()
+                world_state["client_id"] = id
+                data = pickle.dumps(world_state)
+                thread_lock.release()
+                client.sendall(struct.pack('>I', len(data)))
+                client.sendall(data)
         last_time = time.time()
 
 
@@ -54,7 +61,7 @@ def game_logic(world_state, player_inputs):
 
 
 def Main():
-    host = "192.168.0.220"
+    host = "42.0.1.222"
     world_state = GameState().world_state
     player_inputs = [GameState().player_input.copy(), GameState().player_input.copy()]
     port = 3000

@@ -11,9 +11,11 @@ class BulletController:
         self.game = game
         self.bullets = []
         self.consumed_bullets = []
+        self.counter = 0
 
     def add_bullet(self, player, position, angle):
-        self.bullets.append(Bullet(self.game.screen, player, position, angle))
+        self.bullets.append(Bullet(self.game.screen, player, position, angle, self.counter))
+        self.counter += 1
 
     def draw(self):
         for bullet in self.bullets:
