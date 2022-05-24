@@ -192,4 +192,4 @@ class Player:
 
     def get_info(self):
         return {"id": self.id, "x": self.position[0], "y": self.position[1], "angle": self.angle,
-                "lives": self.lives, "bullets": self.bullets "points": self.points}
+                "lives": self.lives, "bullets": self.bullets, "points": self.points}
