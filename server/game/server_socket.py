@@ -34,7 +34,7 @@ def client_read(c, id, player_inputs):
 
 
 def broadcast(clients, world_state, ):
-    tps = 60
+    tps = 600
     last_time = time.time()
     while True:
         interval = 1 / tps
@@ -45,10 +45,11 @@ def broadcast(clients, world_state, ):
             time.sleep(interval - delta)
 
         if clients:
-            thread_lock.acquire()
-            data = pickle.dumps(world_state)
-            thread_lock.release()
-            for client in clients:
+            for id, client in enumerate(clients):
+                thread_lock.acquire()
+                world_state["client_id"] = id
+                data = pickle.dumps(world_state)
+                thread_lock.release()
                 client.sendall(struct.pack('>I', len(data)))
                 client.sendall(data)
         last_time = time.time()
@@ -60,7 +61,7 @@ def game_logic(world_state, player_inputs):
 
 
 def Main():
-    host = "192.168.18.70"
+    host = "42.0.1.222"
     world_state = GameState().world_state
     player_inputs = [GameState().player_input.copy(), GameState().player_input.copy()]
     port = 3000

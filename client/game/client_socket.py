@@ -45,8 +45,7 @@ def server_read(c, world_state, ):
 
 def tanks(world_state):
     condition_obj.acquire()
-    condition_obj.wait(1)
-    print(world_state)
+    condition_obj.wait(5)
     screen = Screen(world_state)
     condition_obj.release()
     screen.start_game()
@@ -108,30 +107,6 @@ def player_inputs(s, ):
                 on_press=on_press,
                 on_release=on_release) as listener:
             listener.join()
-    # while True:
-    #     inputs = GameState().player_input.copy()
-    #     key = keyboard.read_key()
-    #     if key == "w":
-    #         print("W")
-    #         inputs["forward"] = True
-    #         server_send(s, inputs)
-    #     elif key == "s":
-    #         inputs["backward"] = True
-    #         server_send(s, inputs)
-    #     elif key == "a":
-    #         inputs["left"] = True
-    #         server_send(s, inputs)
-    #     elif key == "d":
-    #         inputs["right"] = True
-    #         server_send(s, inputs)
-    #     elif key == "space":
-    #         inputs["shot"] = True
-    #         server_send(s, inputs)
-    #     elif key == "r":
-    #         inputs["reload"] = True
-    #         server_send(s, inputs)
-
-
 
 
 if __name__ == '__main__':
