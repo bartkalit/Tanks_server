@@ -110,7 +110,7 @@ def player_inputs(s, ):
 
 
 if __name__ == '__main__':
-    host = "192.168.0.17"
+    host = "192.168.0.220"
     port = 3000
     world_state = GameState().world_state
 
