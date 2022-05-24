@@ -33,6 +33,12 @@ class HealthBoost:
     def special_gift(player):
         player.add_health(Config.boosters['health']['lives'])
 
+    @staticmethod
+    def pick_up_condition(player):
+        if player.lives < Config.player["lives"]:
+            return True
+        return False
+
 
 class AmmoBoost:
     def __init__(self, screen, sprite):
@@ -64,3 +70,9 @@ class AmmoBoost:
     @staticmethod
     def special_gift(player):
         player.add_ammo(Config.boosters['ammo']['bullets'])
+
+    @staticmethod
+    def pick_up_condition(player):
+        if player.bullets < Config.player['tank']['magazine']:
+            return True
+        return False
