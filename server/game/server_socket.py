@@ -17,16 +17,18 @@ def client_read(c, id, player_inputs):
         b = b''
         data = c.recv(1024)
         b += data
-
-        packet = json.loads(b.decode("utf-8"))
-        thread_lock.acquire()
-        player_inputs[id] = packet
-        print(player_inputs)
-        thread_lock.release()
+        try:
+            thread_lock.acquire()
+            packet = json.loads(b.decode("utf-8"))
+            player_inputs[id] = packet
+        except:
+            print("Invalid Packet")
+        finally:
+            thread_lock.release()
     c.close()
 
 
-def broadcast(clients, world_state,):
+def broadcast(clients, world_state, ):
     tps = 30
     last_time = time.time()
     while True:
@@ -52,7 +54,7 @@ def game_logic(world_state, player_inputs):
 
 
 def Main():
-    host = "127.0.0.1"
+    host = "192.168.0.220"
     world_state = GameState().world_state
     player_inputs = [GameState().player_input.copy(), GameState().player_input.copy()]
     port = 3000
@@ -60,7 +62,7 @@ def Main():
     s.bind((host, port))
     print("socket binded to port", port)
     s.listen(5)
-    start_new_thread(game_logic, (world_state, player_inputs, ))
+    start_new_thread(game_logic, (world_state, player_inputs,))
     start_new_thread(broadcast, (clients, world_state))
 
     id = 0

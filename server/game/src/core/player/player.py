@@ -75,14 +75,6 @@ class Player:
     def _collide(self):
         return self._player_collide() or self._wall_collide()
 
-    def _health_collide(self):
-        for boost in self.game.booster_controller.get_active_boosters():
-            if pygame.sprite.collide_rect(boost.get_sprite(), self.tank):
-                if pygame.sprite.collide_mask(boost.get_sprite(), self.tank):
-                    self.game.booster_controller.deactivate_boost(boost)
-                    return True
-        return False
-
     def add_health(self, additional_lives):
         if self.lives < Config.player['lives']:
             if self.lives + additional_lives > Config.player['lives']:
@@ -105,8 +97,9 @@ class Player:
         for boost in self.game.booster_controller.get_active_boosters():
             if pygame.sprite.collide_rect(boost.get_sprite(), self.tank):
                 if pygame.sprite.collide_mask(boost.get_sprite(), self.tank):
-                    self.game.booster_controller.pick_up(boost, self)
-                    return True
+                    if boost.pick_up_condition(self):
+                        self.game.booster_controller.pick_up(boost, self)
+                        return True
         return False
 
     def move(self, position):

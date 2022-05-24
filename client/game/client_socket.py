@@ -17,8 +17,6 @@ def server_read(c, world_state, ):
         b = b''
         data = c.recv(1024)
         b += data
-        # print(b)
-        # packet = json.loads(b.decode("utf-8"))
         try:
             thread_lock.acquire()
             packet = pickle.loads(data)
@@ -26,7 +24,6 @@ def server_read(c, world_state, ):
             world_state["boosts"] = packet["boosts"]
             world_state["bullets"] = packet["bullets"]
             world_state["boxes"] = packet["boxes"]
-            # print(packet)
         except:
             print("Invalid Packet")
         finally:
@@ -120,7 +117,7 @@ def player_inputs(s, ):
 
 
 if __name__ == '__main__':
-    host = '127.0.0.1'
+    host = '192.168.0.220'
     port = 3000
     world_state = GameState().world_state
 
