@@ -10,6 +10,13 @@ class Sprite(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=position)
 
 
+class CenteredSprite(pygame.sprite.Sprite):
+    def __init__(self, position, image):
+        super().__init__()
+        self.image = image
+        self.rect = self.image.get_rect(center=position)
+
+
 class TankSprite(pygame.sprite.Sprite):
     def __init__(self, position, image):
         super().__init__()

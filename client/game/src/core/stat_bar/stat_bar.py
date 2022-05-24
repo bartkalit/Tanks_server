@@ -1,7 +1,7 @@
 import pygame
 
 from client.game.src.utils.config import Config
-from client.game.src.utils.sprite import Sprite
+from client.game.src.utils.sprite import Sprite, CenteredSprite
 
 
 class StatBar:
@@ -95,3 +95,15 @@ class StatBar:
         #     dead = Sprite((0, height), dead)
         #
         #     screen.blit(dead.image, dead.rect)
+
+    @staticmethod
+    def show_waiting(screen):
+        font_size = 24
+        width = Config.screen['resolution']['width'] / 2
+        height = Config.screen['resolution']['height'] / 2
+
+        font = pygame.font.Font('assets/fonts/connection.ttf', font_size)
+
+        text = font.render('Waiting for other player', True, (255, 255, 255))
+        text = CenteredSprite((width, height), text)
+        screen.blit(text.image, text.rect)

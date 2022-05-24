@@ -32,6 +32,7 @@ def server_read(c, world_state, ):
             world_state["boosts"] = packet["boosts"]
             world_state["bullets"] = packet["bullets"]
             world_state["boxes"] = packet["boxes"]
+            world_state["ready"] = packet["ready"]
             if first_packet:
                 condition_obj.notify()
                 condition_obj.release()

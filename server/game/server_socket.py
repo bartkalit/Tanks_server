@@ -86,6 +86,8 @@ def Main():
         print('Connected to :', addr[0], ':', addr[1])
         start_new_thread(client_read, (c, id, player_inputs))
         id += 1
+        if len(clients) == 2:
+            world_state["ready"] = True
 
     s.close()
 

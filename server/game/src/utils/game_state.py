@@ -5,7 +5,8 @@ class GameState:
         "players": [],
         "boosts": [],
         "bullets": [],
-        "boxes": []
+        "boxes": [],
+        "ready": False
     }
 
     player_input = {
