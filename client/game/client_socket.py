@@ -1,6 +1,7 @@
 import socket
 import json
 import pickle
+import struct
 from _thread import *
 import threading
 from pynput.keyboard import Key, Listener, KeyCode
@@ -16,12 +17,17 @@ def server_read(c, world_state, ):
     condition_obj.acquire()
     first_packet = True
     while True:
+        data_size = struct.unpack('>I', c.recv(4))[0]
         b = b''
-        data = c.recv(1024)
-        b += data
+        reamining_payload_size = data_size
+
+        while reamining_payload_size != 0:
+            b += c.recv(reamining_payload_size)
+            reamining_payload_size = data_size - len(b)
+
         try:
             thread_lock.acquire()
-            packet = pickle.loads(data)
+            packet = pickle.loads(b)
             world_state["players"] = packet["players"]
             world_state["boosts"] = packet["boosts"]
             world_state["bullets"] = packet["bullets"]
@@ -126,7 +132,7 @@ def player_inputs(s, ):
 
 
 if __name__ == '__main__':
-    host = '192.168.0.220'
+    host = "192.168.18.70"
     port = 3000
     world_state = GameState().world_state
 

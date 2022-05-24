@@ -1,4 +1,5 @@
 import socket
+import struct
 from _thread import *
 import threading
 import time
@@ -44,7 +45,9 @@ def broadcast(clients, world_state, ):
             data = pickle.dumps(world_state)
             thread_lock.release()
             for client in clients:
-                client.send(data)
+                print(len(struct.pack('>I', len(data))))
+                client.sendall(struct.pack('>I', len(data)))
+                client.sendall(data)
         last_time = time.time()
 
 
@@ -54,7 +57,7 @@ def game_logic(world_state, player_inputs):
 
 
 def Main():
-    host = "192.168.0.220"
+    host = "192.168.18.70"
     world_state = GameState().world_state
     player_inputs = [GameState().player_input.copy(), GameState().player_input.copy()]
     port = 3000
