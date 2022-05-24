@@ -12,7 +12,6 @@ thread_lock = threading.Lock()
 condition_obj = threading.Condition()
 
 def server_read(c, world_state, ):
-    print("wczytuje")
     condition_obj.acquire()
     first_packet = True
     while True:
@@ -112,7 +111,7 @@ def player_inputs(s, ):
 
 
 if __name__ == '__main__':
-    host = "192.168.0.17"
+    host = "192.168.0.220"
     port = 3000
     world_state = GameState().world_state
 
