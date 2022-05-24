@@ -25,7 +25,7 @@ def client_read(c, id, player_inputs):
 
         try:
             thread_lock.acquire()
-            packet = json.loads(b)
+            packet = pickle.loads(b)
             player_inputs[id] = packet
         except:
             print("Invalid Packet")
@@ -35,7 +35,7 @@ def client_read(c, id, player_inputs):
 
 
 def broadcast(clients, world_state, ):
-    tps = 60
+    tps = 600
     last_time = time.time()
     while True:
         interval = 1 / tps

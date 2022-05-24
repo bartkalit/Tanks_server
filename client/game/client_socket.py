@@ -45,7 +45,7 @@ def server_read(c, world_state, ):
 
 def tanks(world_state):
     condition_obj.acquire()
-    condition_obj.wait(20)
+    condition_obj.wait(5)
     screen = Screen(world_state)
     condition_obj.release()
     screen.start_game()
@@ -53,7 +53,7 @@ def tanks(world_state):
 
 
 def server_send(s, player_input):
-    data = json.dumps(player_input)
+    data = pickle.dumps(player_input)
 
     s.sendall(struct.pack('>I', len(data)))
     s.sendall(data)
