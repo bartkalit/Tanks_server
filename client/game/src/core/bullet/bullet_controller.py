@@ -25,15 +25,16 @@ class BulletController:
                 return bullet
         return None
 
-    def update_bullets(self):
+    def update_bullets(self, time):
         bullets_ids = []
         for bullet_info in self.game.world_state["bullets"]:
             bullet = self.get_bullet(bullet_info["id"])
             bullets_ids.append(bullet_info["id"])
             position = (bullet_info["x"], bullet_info["y"])
             if bullet:
-                bullet.position = position
-                bullet.angle = bullet_info["angle"]
+                # bullet.position = position
+                # bullet.angle = bullet_info["angle"]
+                self.move(bullet, time)
             else:
                 self.add_bullet(
                     bullet_info["id"],
@@ -62,14 +63,14 @@ class BulletController:
         # TODO: Check if additional collision check isn't needed before moving bullet
         if self._collide(bullet):
             self.consumed_bullets.append(bullet)
-            player = self._player_collide(bullet)
-            if player:
-                if player.lives > 1:
-                    bullet.player.add_hit()
-                    player.was_hit()
-                else:
-                    bullet.player.add_kill()
-                    player.die()
+            # player = self._player_collide(bullet)
+            # if player:
+            #     if player.lives > 1:
+            #         bullet.player.add_hit()
+            #         player.was_hit()
+            #     else:
+            #         bullet.player.add_kill()
+            #         player.die()
 
     @staticmethod
     def _delete_bullet(bullet):

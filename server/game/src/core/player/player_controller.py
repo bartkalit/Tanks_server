@@ -1,6 +1,5 @@
 from enum import Enum
 from math import cos, sin, pi
-import pygame
 
 from server.game.src.core.stat_bar.stat_bar import StatBar
 from server.game.src.utils.config import Config
@@ -31,7 +30,7 @@ class PlayerController:
 
     def on(self, time):
         if self.player.is_alive():
-            input = self.players_inputs[self.player.id - 1]
+            input = self.players_inputs[self.player.id]
             if input["forward"]:
                 self.drive(Drive.FORWARD, time)
             if input["backward"]:

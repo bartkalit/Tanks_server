@@ -20,7 +20,7 @@ class GameController:
 
     def join(self):
         players = self.game.players
-        player = Player(self.game, len(players) + 1)
+        player = Player(self.game, len(players))
         self.players.append(PlayerController(player, self.screen, self.players_inputs))
         if self.current_player is None:
             player.change_current()
@@ -30,6 +30,18 @@ class GameController:
     def start(self):
         self.game.refresh_map()
         self.loop()
+
+    def get_players_info(self):
+        players = []
+        for player in self.game.players:
+            players.append(player.get_info())
+        return players
+
+    def get_bullets_info(self):
+        bullets = []
+        for bullet in self.game.bullet_controller.bullets:
+            bullets.append(bullet.get_info())
+        return bullets
 
     def loop(self):
         clock = pygame.time.Clock()
@@ -42,7 +54,9 @@ class GameController:
             # for player in self.players:
             self.players[1].on(frame_time / 1000)
             self.current_player.on(frame_time / 1000)
+            self.world_state["players"] = self.get_players_info()
             self.game.bullet_controller.update_bullets(frame_time / 1000)
+            self.world_state["bullets"] = self.get_bullets_info()
             self.game.booster_controller.update_time(frame_time / 1000)
             self.game.refresh_map()
             pygame.display.set_caption('FurryTanks - %.2f FPS' % clock.get_fps())

@@ -9,10 +9,12 @@ from client.game.src.core.screen import Screen
 from client.game.src.utils.game_state import GameState
 
 thread_lock = threading.Lock()
-
+condition_obj = threading.Condition()
 
 def server_read(c, world_state, ):
     print("wczytuje")
+    condition_obj.acquire()
+    first_packet = True
     while True:
         b = b''
         data = c.recv(1024)
@@ -24,6 +26,10 @@ def server_read(c, world_state, ):
             world_state["boosts"] = packet["boosts"]
             world_state["bullets"] = packet["bullets"]
             world_state["boxes"] = packet["boxes"]
+            if first_packet:
+                condition_obj.notify()
+                condition_obj.release()
+                first_packet = False
         except:
             print("Invalid Packet")
         finally:
@@ -32,7 +38,10 @@ def server_read(c, world_state, ):
 
 
 def tanks(world_state):
+    condition_obj.acquire()
+    condition_obj.wait(20)
     screen = Screen(world_state)
+    condition_obj.release()
     screen.start_game()
     pass
 
@@ -125,7 +134,7 @@ if __name__ == '__main__':
     s.connect((host, port))
 
     start_new_thread(server_read, (s, world_state,))
-    # start_new_thread(tanks, (world_state, ))
+    start_new_thread(tanks, (world_state, ))
     send = threading.Thread(target=player_inputs, args=(s,))
     send.start()
     send.join()

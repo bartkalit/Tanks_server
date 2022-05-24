@@ -37,7 +37,7 @@ class Player:
         self.is_current = ~self.is_current
 
     def create_tank(self):
-        tank = pygame.image.load('assets/textures/tank' + str(self.id) + '.png')
+        tank = pygame.image.load('assets/textures/tank' + str(self.id + 1) + '.png')
 
         self.position = self.map.get_spawn_point
         self.tank = TankSprite(self.position, pygame.transform.scale(tank, self.get_tank_size()))
@@ -189,3 +189,7 @@ class Player:
             StatBar.show_points(self.screen, self)
         # TODO: Add points
         pass
+
+    def get_info(self):
+        return {"id": self.id, "x": self.position[0], "y": self.position[1],
+                "angle": self.angle, "lives": self.lives, "points": self.points}

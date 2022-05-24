@@ -56,6 +56,10 @@ class Game:
             player = self.get_player(id)
             player.move(position)
             player.rotate(player_info["angle"])
+            player.lives = player_info["lives"]
+            if player.points != player_info["points"]:
+                player.points = player_info["points"]
+                player.update_points_ui()
 
     def refresh_map(self):
         self.refresh_ground()

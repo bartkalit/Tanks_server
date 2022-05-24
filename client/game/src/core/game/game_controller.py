@@ -13,7 +13,7 @@ thread_lock = threading.Lock()
 class GameController:
     def __init__(self, screen, world_state):
         self.screen = screen
-
+        self.world_state = world_state
         self.game = Game(screen, world_state)
         self.game.load_players()
         self.game.load_assets()
@@ -42,7 +42,7 @@ class GameController:
                 if event.type == pygame.QUIT:
                     running = False
             # self.current_player.on(frame_time / 1000)
-            self.game.bullet_controller.update_bullets()
+            self.game.bullet_controller.update_bullets(frame_time / 1000)
             # self.game.booster_controller.update_time()
             self.game.update_players()
             self.game.refresh_map()
