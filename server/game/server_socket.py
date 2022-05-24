@@ -5,6 +5,8 @@ import threading
 import time
 import pickle
 import os
+import random
+
 from server.game.src.utils.game_state import GameState
 from server.game.src.core.screen import Screen
 
@@ -71,6 +73,9 @@ def Main():
     print("PORT:", port)
     host = ip
     world_state = GameState().world_state
+    maps = ["city", "village"]
+    world_state["map"] = random.choice(maps)
+    print("MAP:", world_state["map"])
     player_inputs = [GameState().player_input.copy(), GameState().player_input.copy()]
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((host, port))

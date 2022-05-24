@@ -34,6 +34,7 @@ def server_read(c, world_state, ):
             world_state["boxes"] = packet["boxes"]
             world_state["ready"] = packet["ready"]
             if first_packet:
+                world_state["map"] = packet["map"]
                 condition_obj.notify()
                 condition_obj.release()
                 first_packet = False

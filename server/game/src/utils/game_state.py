@@ -1,6 +1,6 @@
 class GameState:
     world_state = {
-        "map": "city",
+        "map": "danzig",
         "client_id": 0,
         "players": [],
         "boosts": [],

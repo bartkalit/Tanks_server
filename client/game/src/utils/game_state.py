@@ -1,11 +1,12 @@
 class GameState:
     world_state = {
-        "map": "city",
+        "map": "",
         "client_id": 0,
         "players": [],
         "boosts": [],
         "bullets": [],
-        "boxes": []
+        "boxes": [],
+        "ready": False
     }
 
     player_input = {
