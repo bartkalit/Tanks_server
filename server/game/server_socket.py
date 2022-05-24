@@ -4,16 +4,19 @@ from _thread import *
 import threading
 import time
 import pickle
-
+import os
 from server.game.src.utils.game_state import GameState
 from server.game.src.core.screen import Screen
 
+os.environ["SDL_VIDEODRIVER"] = "dummy"
 thread_lock = threading.Lock()
 clients = []
 
 
 def client_read(c, id, player_inputs):
     while True:
+        if len(clients) < 2:
+            continue
         data_size = struct.unpack('>I', c.recv(4))[0]
         b = b''
         reamining_payload_size = data_size
