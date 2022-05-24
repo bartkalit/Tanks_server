@@ -49,17 +49,27 @@ class Game:
             player = Player(self, player_info["id"], position, player_info["angle"])
             self.players.append(player)
 
-    def update_players(self):
+    def update_players(self, current_player):
         for player_info in self.world_state["players"]:
             id = player_info["id"]
             position = (player_info["x"], player_info["y"])
             player = self.get_player(id)
             player.move(position)
             player.rotate(player_info["angle"])
-            player.lives = player_info["lives"]
+            if player.lives != player_info["lives"]:
+                player.lives = player_info["lives"]
+                if player == current_player:
+                    player._update_hearts_ui()
+
+            # if player.bullets != player_info["bullets"]:
+            #     player.bullets = player_info["bullets"]
+            #     if player == current_player:
+            #         player._update_ammo_ui()
+
             if player.points != player_info["points"]:
                 player.points = player_info["points"]
-                player.update_points_ui()
+                if player == current_player:
+                    player.update_points_ui()
 
     def refresh_map(self):
         self.refresh_ground()

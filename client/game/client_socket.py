@@ -1,5 +1,4 @@
 import socket
-import json
 import pickle
 import struct
 from _thread import *
@@ -28,6 +27,7 @@ def server_read(c, world_state, ):
         try:
             thread_lock.acquire()
             packet = pickle.loads(b)
+            world_state["client_id"] = packet["client_id"]
             world_state["players"] = packet["players"]
             world_state["boosts"] = packet["boosts"]
             world_state["bullets"] = packet["bullets"]
@@ -45,7 +45,8 @@ def server_read(c, world_state, ):
 
 def tanks(world_state):
     condition_obj.acquire()
-    condition_obj.wait(20)
+    condition_obj.wait(1)
+    print(world_state)
     screen = Screen(world_state)
     condition_obj.release()
     screen.start_game()
@@ -53,7 +54,7 @@ def tanks(world_state):
 
 
 def server_send(s, player_input):
-    data = json.dumps(player_input)
+    data = pickle.dumps(player_input)
 
     s.sendall(struct.pack('>I', len(data)))
     s.sendall(data)
@@ -134,7 +135,7 @@ def player_inputs(s, ):
 
 
 if __name__ == '__main__':
-    host = "192.168.18.70"
+    host = "42.0.1.222"
     port = 3000
     world_state = GameState().world_state
 

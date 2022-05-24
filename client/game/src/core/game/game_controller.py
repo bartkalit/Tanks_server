@@ -21,14 +21,19 @@ class GameController:
         self.current_player = None
 
     def join(self):
+        print(self.game.world_state["client_id"])
         player = self.game.get_player(self.game.world_state["client_id"])
         # player = Player(self.game, len(players) + 1)
         if self.current_player is None:
             player.change_current()
             self.current_player = PlayerController(player, self.screen)
         # self.game.add_player(player)
+        pass
 
     def start(self):
+        # player = self.game.get_player(self.game.world_state["client_id"])
+        # player.change_current()
+        # self.current_player = PlayerController(player, self.screen)
         self.game.refresh_map()
         self.loop()
 
@@ -44,7 +49,7 @@ class GameController:
             # self.current_player.on(frame_time / 1000)
             self.game.bullet_controller.update_bullets(frame_time / 1000)
             # self.game.booster_controller.update_time()
-            self.game.update_players()
+            self.game.update_players(self.current_player.player)
             self.game.refresh_map()
             thread_lock.release()
             pygame.display.set_caption('FurryTanks - %.2f FPS' % clock.get_fps())

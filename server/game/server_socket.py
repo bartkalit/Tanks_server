@@ -3,7 +3,6 @@ import struct
 from _thread import *
 import threading
 import time
-import json
 import pickle
 
 from server.game.src.utils.game_state import GameState
@@ -25,7 +24,7 @@ def client_read(c, id, player_inputs):
 
         try:
             thread_lock.acquire()
-            packet = json.loads(b)
+            packet = pickle.loads(b)
             player_inputs[id] = packet
         except:
             print("Invalid Packet")
