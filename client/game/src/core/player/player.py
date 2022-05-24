@@ -168,8 +168,6 @@ class Player:
         self._update_hearts_ui()
 
     def was_hit(self):
-        # self.lives -= 1
-
         self._update_hearts_ui()
 
     def _update_hearts_ui(self):
@@ -182,20 +180,7 @@ class Player:
             StatBar.show_reload(self.screen, self)
 
     def is_alive(self):
-        return self._alive
+        return not self.lives <= 0
 
     def update_points_ui(self):
         StatBar.show_points(self.screen, self)
-
-    # def add_kill(self):
-    #     self._kill_count += 1
-    #     self.points += Config.rewards['kill']
-    #     if self.is_current:
-    #         StatBar.show_points(self.screen, self)
-    #
-    # def add_hit(self):
-    #     self.points += Config.rewards['hit']
-    #     if self.is_current:
-    #         StatBar.show_points(self.screen, self)
-    #     # TODO: Add points
-    #     pass
