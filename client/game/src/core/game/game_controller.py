@@ -22,7 +22,6 @@ class GameController:
         self.current_player = None
 
     def join(self):
-        print(self.game.world_state["client_id"])
         player = self.game.get_player(self.game.world_state["client_id"])
         if self.current_player is None:
             player.change_current()

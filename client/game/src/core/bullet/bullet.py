@@ -14,7 +14,6 @@ class Bullet:
         self.create()
 
     def create(self):
-        print(f"id {self.id} pos {self.position} ang {self.angle}")
         self.bullet = BulletSprite(self.position, self.angle)
 
     def draw(self):

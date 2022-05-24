@@ -12,7 +12,6 @@ thread_lock = threading.Lock()
 condition_obj = threading.Condition()
 
 def server_read(c, world_state, ):
-    print("wczytuje")
     condition_obj.acquire()
     first_packet = True
     while True:
