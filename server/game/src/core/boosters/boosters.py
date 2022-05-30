@@ -3,9 +3,10 @@ from server.game.src.utils.sprite import Sprite
 
 
 class HealthBoost:
-    def __init__(self, screen, sprite):
+    def __init__(self, screen, sprite, id):
         self.screen = screen
         self._sprite = sprite
+        self.id = id
         self._reset_time = 0
 
     def draw(self):
@@ -41,9 +42,10 @@ class HealthBoost:
 
 
 class AmmoBoost:
-    def __init__(self, screen, sprite):
+    def __init__(self, screen, sprite, id):
         self.screen = screen
         self._sprite = sprite
+        self.id = id
         self._reset_time = 0
 
     def draw(self):

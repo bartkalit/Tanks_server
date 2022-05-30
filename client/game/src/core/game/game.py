@@ -4,6 +4,7 @@ from client.game.src.core.boosters.booster_controller import BoosterController
 from client.game.src.core.bullet.bullet_controller import BulletController
 from client.game.src.core.map import Map
 from client.game.src.core.player.player import Player
+from client.game.src.core.stat_bar.stat_bar import StatBar
 from client.game.src.utils.assets import Assets
 
 
@@ -15,24 +16,13 @@ class Game:
         self.players = []
         self.assets = Assets(screen, self.map)
         self.bullet_controller = BulletController(self)
-        self.booster_controller = BoosterController(self)
+        self.booster_controller = BoosterController(self, world_state)
         pass
 
     def get_player(self, id):
         for player in self.players:
             if player.id == id:
                 return player
-
-    # def add_player(self, player):
-    #     self.players.append(player)
-    #
-    #
-    #     # players = self.game.players
-    #     # player = Player(self.game, len(players) + 1)
-    #     # if self.current_player is None:
-    #     #     player.change_current()
-    #     #     self.current_player = PlayerController(player, self.screen)
-    #     # self.game.add_player(player)
 
     def load_assets(self):
         x, y = 0, 0

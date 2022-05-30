@@ -4,16 +4,21 @@ from _thread import *
 import threading
 import time
 import pickle
+import os
+import random
 
 from server.game.src.utils.game_state import GameState
 from server.game.src.core.screen import Screen
 
+os.environ["SDL_VIDEODRIVER"] = "dummy"
 thread_lock = threading.Lock()
 clients = []
 
 
 def client_read(c, id, player_inputs):
     while True:
+        if len(clients) < 2:
+            continue
         data_size = struct.unpack('>I', c.recv(4))[0]
         b = b''
         reamining_payload_size = data_size
@@ -61,10 +66,17 @@ def game_logic(world_state, player_inputs):
 
 
 def Main():
-    host = "42.0.1.222"
-    world_state = GameState().world_state
-    player_inputs = [GameState().player_input.copy(), GameState().player_input.copy()]
+    ip = socket.gethostbyname(socket.gethostname())
     port = 3000
+
+    print("IP:", ip)
+    print("PORT:", port)
+    host = ip
+    world_state = GameState().world_state
+    maps = ["city", "village"]
+    world_state["map"] = random.choice(maps)
+    print("MAP:", world_state["map"])
+    player_inputs = [GameState().player_input.copy(), GameState().player_input.copy()]
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((host, port))
     print("socket binded to port", port)
@@ -79,6 +91,8 @@ def Main():
         print('Connected to :', addr[0], ':', addr[1])
         start_new_thread(client_read, (c, id, player_inputs))
         id += 1
+        if len(clients) == 2:
+            world_state["ready"] = True
 
     s.close()
 

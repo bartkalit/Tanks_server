@@ -51,9 +51,9 @@ class GameController:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-            # for player in self.players:
-            self.players[1].on(frame_time / 1000)
-            self.current_player.on(frame_time / 1000)
+            for player in self.players:
+                player.on(frame_time / 1000)
+            # self.current_player.on(frame_time / 1000)
             self.world_state["players"] = self.get_players_info()
             self.game.bullet_controller.update_bullets(frame_time / 1000)
             self.world_state["bullets"] = self.get_bullets_info()

@@ -15,7 +15,7 @@ class Game:
         self.players = []
         self.assets = Assets(screen, self.map)
         self.bullet_controller = BulletController(self)
-        self.booster_controller = BoosterController(self)
+        self.booster_controller = BoosterController(self, world_state)
         pass
 
     def add_player(self, player):
